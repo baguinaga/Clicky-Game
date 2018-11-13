@@ -7,8 +7,16 @@ class App extends Component {
   state = {
     characters: characters,
     selected: [],
-    score: 0,
-    highscore: 0
+    score: 0
+  };
+
+  handleHighscore = () => {
+    const newHighscore =
+      this.state.score > this.state.highscore
+        ? this.state.score
+        : this.state.highscore;
+
+    return newHighscore;
   };
 
   handleCharShuffle = () => {
@@ -25,6 +33,7 @@ class App extends Component {
 
     if (!charSelected.includes(id)) {
       charSelected.push(id);
+
       this.handleCharShuffle();
       this.setState({
         selected: charSelected,
@@ -43,6 +52,11 @@ class App extends Component {
     return (
       <div className="container text-center">
         <h1>Clicky Game</h1>
+        <h2>
+          {" "}
+          Score: <span>{this.state.score}</span> Highscore :{" "}
+          <span>{this.state.highscore}</span>{" "}
+        </h2>
         <div className="wrapper">
           {this.state.characters.map((char, i) => (
             <Card
