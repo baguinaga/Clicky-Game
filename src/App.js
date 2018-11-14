@@ -7,16 +7,8 @@ class App extends Component {
   state = {
     characters: characters,
     selected: [],
-    score: 0
-  };
-
-  handleHighscore = () => {
-    const newHighscore =
-      this.state.score > this.state.highscore
-        ? this.state.score
-        : this.state.highscore;
-
-    return newHighscore;
+    score: 0,
+    highscore: 0
   };
 
   handleCharShuffle = () => {
@@ -25,6 +17,7 @@ class App extends Component {
     charShuffled.sort(function(a, b) {
       return 0.5 - Math.random();
     });
+
     this.setState({ characters: charShuffled });
   };
 
@@ -33,11 +26,17 @@ class App extends Component {
 
     if (!charSelected.includes(id)) {
       charSelected.push(id);
-
+      
       this.handleCharShuffle();
-      this.setState({
-        selected: charSelected,
-        score: this.state.score + 1
+      this.setState((prevState, props) => {
+        return {
+          selected: charSelected,
+          score: prevState.score + 1,
+          highscore:
+            prevState.highscore > prevState.score + 1
+              ? prevState.highscore
+              : prevState.score + 1
+        };
       });
     } else {
       this.handleCharShuffle();
@@ -53,9 +52,8 @@ class App extends Component {
       <div className="container text-center">
         <h1>Clicky Game</h1>
         <h2>
-          {" "}
-          Score: <span>{this.state.score}</span> Highscore :{" "}
-          <span>{this.state.highscore}</span>{" "}
+          Score: <span>{this.state.score}</span> Highscore:{" "}
+          <span>{this.state.highscore}</span>
         </h2>
         <div className="wrapper">
           {this.state.characters.map((char, i) => (
